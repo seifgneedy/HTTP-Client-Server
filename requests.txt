@@ -1,0 +1,2 @@
+client_get /index.html
+client_post /play.html
