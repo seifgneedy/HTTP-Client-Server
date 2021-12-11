@@ -16,8 +16,10 @@ static const int BUFFER_SIZE = 4096;  //4kb
 
 public:
     parser ps;
-    /* open file 
-    read it line by line with every line : get the request in 2 parts: method file_path */
+    /* 
+    open file 
+    read it line by line with every line : get the request in 2 parts: method file_path 
+    */
     vector<vector<string>> get_requests(string path);
     /*
         create http response in format that client can understand
@@ -31,6 +33,10 @@ public:
         open the file specified in POST and returns its content
     */
     pair<char*,int> get_file_content(string file_path);
+    /*
+        create directories (if exists) for the specified file_path
+    */ 
+    void create_dirs(string file_path);
     /*
         save the content in the file path
     */
@@ -48,7 +54,7 @@ public:
         ,handle the required request, send the request receive resoponse and handle it
 
     */
-    void handle_requests(string file_path, int clntSock,struct sockaddr_in * servAddr );
+    void handle_requests(string file_path, int clntSock);
     file_util(/* args */){
 
     }
@@ -111,7 +117,13 @@ string file_util::create_http_response(string method_line,string body){
     }
     return response.str();
 }
-
+void file_util::create_dirs(string file_path){
+    int last_dir=file_path.find_last_of('/');
+    if(last_dir!=0){
+        string file_dir=file_path.substr(1,last_dir-1);
+        filesystem::create_directories(file_dir);
+    }
+}
 void file_util::save_file(string path,string content){
     ofstream ff(path);
     ff.write(content.c_str(),content.size());

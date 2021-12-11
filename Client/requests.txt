@@ -1,2 +1,2 @@
-client_post /images.jpg
-client_get /play/index.html
+client_post /test.jpg
+client_get /play.html

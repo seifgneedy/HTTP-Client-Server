@@ -15,14 +15,12 @@ void dieWithSystemMessage(char* msg);
 void thread_func(int clntSock);
 int main(int argc,char* argv[]){
     // take arguments and don't forget -pthread
-    /* 
     if(argc != 2){
         cout<<"wrong args, it should be \"./server port_number\""<<endl;
         exit(EXIT_FAILURE);
     }
     // get server IP 
-    in_port_t servPort = atoi(argv[1]); */
-    in_port_t servPort=8080;
+    in_port_t servPort = atoi(argv[1]);
     // create socket for incoming connections
     int servSock;
     if((servSock= socket(AF_INET,SOCK_STREAM,0))<0)
@@ -57,7 +55,6 @@ int main(int argc,char* argv[]){
                 puts("Unable to get client address");
             // here we should attach thread to work with incoming client request 
             // used <thread> in c++11 
-            handler.clients_count++;
             thread cl_thread(thread_func,clntSock);
             cl_thread.detach();            
         }
@@ -73,11 +70,10 @@ int main(int argc,char* argv[]){
 }
 void thread_func(int clntSock){
     // handle client request
-    cout<<handler.clients_count<<endl;
+    handler.clients_count++;
     handler.handle(clntSock);
     // decrease number of clients as this client finished
     handler.clients_count--;
-    cout<<handler.clients_count<<endl;
 }
 void dieWithSystemMessage(char * msg){
     perror(msg);
