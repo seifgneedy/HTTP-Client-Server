@@ -2,8 +2,9 @@
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <unistd.h>
+#include <iostream>
 #include <string>
-#include "../Util/file_util.cpp"
+#include "../Utils/file_util.cpp"
 using namespace std;
 class client_handler{
 private:
@@ -28,7 +29,6 @@ public:
     ~client_handler();
 };
 void client_handler::handle(int clntSock){
-    // try a new idea
     string body="";
     while(true){
         set_timeout(clntSock);
@@ -37,6 +37,8 @@ void client_handler::handle(int clntSock){
         body=request.second;
         if(method==""&&body=="")
             break;
+        // printing the incoming request
+        cout<<method<<endl<<body<<endl;
         // make response according to the method
         string response=fu.create_http_response(method,body);
         fu.send_message(response,clntSock);
